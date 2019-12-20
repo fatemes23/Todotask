@@ -99,7 +99,7 @@ public  class TodayFragmentActivity extends Fragment  {
         //ezafe krdn b database
         ToDoTask toDoTask = new ToDoTask(title,todoime,body,alarmtime);
         PinActivity.dataBase.insertTask(toDoTask,nameOfDay,"todo");
-        update(recyclerView);
+        //update(recyclerView);
 
 
 

@@ -1,5 +1,6 @@
 package com.sanai.tasky;
 
+//kelas kar haye tmoom shode
 public class DoneTask {
 
     String doneTitle ;

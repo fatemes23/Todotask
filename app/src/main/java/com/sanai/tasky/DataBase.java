@@ -67,7 +67,7 @@ public class DataBase extends SQLiteOpenHelper {
 
     }
 
-    /// bayad status to do bashe va dayoftask oon chizi bashe ke behesh midim
+    //// bayad status to do bashe va dayoftask oon chizi bashe ke behesh midim
     public ArrayList<ToDoTask> getTodayasTasks(String status , String day ){
         String sql = "select * from " + TASK_TABLE + " where status = ? and dayoftask = ? " ;
         SQLiteDatabase db = this.getReadableDatabase();

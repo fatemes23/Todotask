@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-
+//
 public class DoneTaskAdapter extends RecyclerView.Adapter<DoneTaskAdapter.MyTaskViewHolder> {
 
     List<DoneTask> doneTaskList;

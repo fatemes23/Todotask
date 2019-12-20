@@ -105,7 +105,7 @@ public class AddTaskFragmentActivity extends Fragment{
 
 
                 if(title.matches("")&& time1.matches("")){
-                    Toast.makeText(getActivity(),"title  and to do time can't be empty",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"title or to do time can't be empty",Toast.LENGTH_LONG).show();
 
 
                 }

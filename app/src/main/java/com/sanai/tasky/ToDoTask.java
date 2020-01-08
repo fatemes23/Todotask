@@ -12,8 +12,11 @@ public class ToDoTask {
         this.todoTime = todoTime;
         this.todoBody = todoBody;
         this.todoNotifictionTime = todoNotifictionTime;
-        //this.id=id;
 
+    }
+
+    public int getIdtOdO() {
+        return id;
     }
 
     public ToDoTask(String todoTitle) {

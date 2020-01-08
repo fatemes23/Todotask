@@ -1,7 +1,11 @@
 package com.sanai.tasky;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
@@ -35,7 +39,12 @@ public class AddTaskFragmentActivity extends Fragment{
     TextView todoTime ;
     TextView alarmTime ;
     EditText title_editText , body_editTExt  ;
-    String title , body , hour1 , hour2 , min1 , min2,time1,time2;
+    String title , body ,time1,time2;
+    String nameOfDay;
+    String whichFrag;
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -43,8 +52,12 @@ public class AddTaskFragmentActivity extends Fragment{
 
         View view = inflater.inflate(R.layout.activity_add_task_fragment,container,false);
 
+
         title_editText = view.findViewById(R.id.titleInput);
         body_editTExt = view.findViewById(R.id.noteInput);
+        nameOfDay = this.getArguments().getString("nameOfDay");
+        whichFrag = this.getArguments().getString("whichFrag");
+
 
 
         //************************************************************************************************
@@ -67,7 +80,7 @@ public class AddTaskFragmentActivity extends Fragment{
         todoTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCustomTimePicker(todoTime);
+                showCustomTimePickerForTodo(todoTime);
             }
         });
         //_________________________________________________________________________
@@ -75,7 +88,7 @@ public class AddTaskFragmentActivity extends Fragment{
         alarmTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCustomTimePicker(alarmTime);
+                showCustomTimePickerForAlarm(alarmTime);
             }
         });
 
@@ -96,8 +109,14 @@ public class AddTaskFragmentActivity extends Fragment{
                 //__________________________________________________
 
                 String alarmTime_str = alarmTime.getText().toString();
-                 separated = alarmTime_str.split(" ");
-                time2=separated[0]; // to do time
+                separated = alarmTime_str.split(" ");
+                time2=separated[0]; // notifiction time
+
+                if (time2.equals("")){
+                    Toast.makeText(getActivity(),time2,Toast.LENGTH_LONG).show();
+
+                }
+
 
                 //__________________________________________________
 
@@ -109,15 +128,26 @@ public class AddTaskFragmentActivity extends Fragment{
 
 
                 }
-                 else if(title.matches("")) {
-                     Toast.makeText(getActivity(),"title can't be empty",Toast.LENGTH_LONG).show();
+                else if(title.matches("")) {
+                    Toast.makeText(getActivity(),"title can't be empty",Toast.LENGTH_LONG).show();
                 }else if (time1.matches("")){
-                     Toast.makeText(getActivity(),"todo time can't be empty",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"todo time can't be empty",Toast.LENGTH_LONG).show();
 
-                 }else{
+                }else{
                     getFragmentManager().beginTransaction().setCustomAnimations( R.anim.slide_down_to_up, R.anim.slide_down_to_up)
                             .remove(AddTaskFragmentActivity.this).commit();
-                    TodayFragmentActivity.saveNewTask(title,body,time1,time2);
+                    ToDoTask toDoTask = new ToDoTask(title,time1,body,time2);
+                    PinActivity.dataBase.insertTask(toDoTask,nameOfDay,"todo");
+
+                    if (whichFrag.equals("today")){
+                        TodayFragmentActivity todayFragmentActivity = new TodayFragmentActivity();
+                        todayFragmentActivity.saveNewTask();
+                    }else if( whichFrag.equals("next")){
+                        NextDaysActivity nextDaysActivity = new NextDaysActivity();
+                        nextDaysActivity.saveNewTask();
+                    }
+
+
                 }
 
 
@@ -131,7 +161,7 @@ public class AddTaskFragmentActivity extends Fragment{
     }
 
 
-    public void showCustomTimePicker(final TextView txtview)
+    public void showCustomTimePickerForTodo(final TextView txtview )
     {
 
         final Calendar myCalender = Calendar.getInstance();
@@ -145,6 +175,7 @@ public class AddTaskFragmentActivity extends Fragment{
                 if (view.isShown()) {
                     myCalender.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     myCalender.set(Calendar.MINUTE, minute);
+                    myCalender.set(Calendar.SECOND,0);
 
 
                     Spannable wordtoSpan = new SpannableString(hourOfDay +":" + minute +"  tap to change the time" );
@@ -152,8 +183,15 @@ public class AddTaskFragmentActivity extends Fragment{
                     wordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#D8D8D8")), (hourOfDay +":" + minute).length()+1, wordtoSpan.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     txtview.setText(wordtoSpan);
 
+
                 }
+
+
+
+
             }
+
+
 
 
         };
@@ -162,6 +200,81 @@ public class AddTaskFragmentActivity extends Fragment{
         timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         timePickerDialog.show();
     }
+
+    public void showCustomTimePickerForAlarm(final TextView txtview )
+    {
+
+        final Calendar myCalender = Calendar.getInstance();
+        int hour = myCalender.get(Calendar.HOUR_OF_DAY);
+        int minute = myCalender.get(Calendar.MINUTE);
+
+
+        TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                if (view.isShown()) {
+                    myCalender.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    myCalender.set(Calendar.MINUTE, minute);
+                    myCalender.set(Calendar.SECOND,0);
+                    //day ro hm inja set koni...n
+
+
+                    Spannable wordtoSpan = new SpannableString(hourOfDay +":" + minute +"  tap to change the time" );
+                    wordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#FEDC97")), 0, (hourOfDay +":" + minute).length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    wordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#D8D8D8")), (hourOfDay +":" + minute).length()+1, wordtoSpan.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    txtview.setText(wordtoSpan);
+
+
+                }
+                if(whichFrag=="today") {// dar vaghe bayad roooz ro be calender ezaf konm // vali migm age emrooz bood seet kon..
+                    title = title_editText.getText().toString();
+                    body = body_editTExt.getText().toString();
+                    myCalender.set(Calendar.DAY_OF_WEEK, Calendar.getInstance().get(Calendar.DAY_OF_WEEK));
+                    startAlertAtParticularTime(myCalender, title, body);
+                }
+
+            }
+
+
+
+
+        };
+
+            TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), TimePickerDialog.THEME_HOLO_DARK, myTimeListener, hour, minute, true);
+            timePickerDialog.setTitle("Choose time :");
+            timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            timePickerDialog.show();
+
+    }
+    public void startAlertAtParticularTime(Calendar calendar, String title , String messege) {
+
+      if(!calendar.before(Calendar.getInstance())){
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getContext(), AlarmReciever.class);
+        intent.putExtra("title" , title);
+        intent.putExtra("message" , messege);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getContext(), 1, intent, 0);
+        alarmManager.setExact(alarmManager.RTC_WAKEUP,calendar.getTimeInMillis() ,pendingIntent);
+
+        }
+
+
+
+
+    }
+    public void  cancelAlarm(){
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(getContext(), AlarmReciever.class);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                getContext(), 1, intent, 0);
+        alarmManager.cancel(pendingIntent);
+
+    }
+
 
 
 

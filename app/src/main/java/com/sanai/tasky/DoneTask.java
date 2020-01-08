@@ -4,9 +4,11 @@ package com.sanai.tasky;
 public class DoneTask {
 
     String doneTitle ;
+    int idOfDone;
 
-    public DoneTask(String doneTitle) {
+    public DoneTask(String doneTitle , int idOfDone) {
         this.doneTitle = doneTitle;
+        this.idOfDone= idOfDone;
     }
 
     public String getDoneTitle() {

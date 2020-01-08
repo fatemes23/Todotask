@@ -17,14 +17,6 @@ import static android.support.v4.content.WakefulBroadcastReceiver.startWakefulSe
 
 public class AlarmReciever extends BroadcastReceiver
 {
-//    public void onReceive(Context context, Intent intent) {
-//        Toast.makeText(context, "Time Up... Now Vibrating !!!",
-//                Toast.LENGTH_LONG).show();
-//        Vibrator vibrator = (Vibrator) context
-//                .getSystemService(Context.VIBRATOR_SERVICE);
-//        vibrator.vibrate(20000);
-//
-//    }
 
 
     Ringtone ringtone;
@@ -62,6 +54,7 @@ public class AlarmReciever extends BroadcastReceiver
                 MainActivity.class.getName());
         startWakefulService(context, (intent.setComponent(comp)));
         setResultCode(Activity.RESULT_OK);
+
         NotificationHelper notificationHelper =  new NotificationHelper( context);
         NotificationCompat.Builder nb = notificationHelper.getChanellNotification(title,message);
         notificationHelper.getManager().notify(1,nb.build()  );

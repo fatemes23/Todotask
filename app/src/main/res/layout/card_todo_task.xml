@@ -59,7 +59,7 @@
             android:layout_gravity="right|center_vertical"
             android:background="@color/white"
             android:scaleX="-1"
-            android:id="@+id/forward"
+            android:id="@+id/forwardTask"
             android:src="@drawable/ic_reply_white_24dp" />
 
         <LinearLayout

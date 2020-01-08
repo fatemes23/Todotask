@@ -76,11 +76,13 @@ public class DataBase extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             do{
                 int id = Integer.parseInt(cursor.getString(0));
+
                 String title = cursor.getString(1);
                 String description = cursor.getString(2);
                 String dueTime = cursor.getString(3);
                 String alarmtime = cursor.getString(4);
                 ToDoTask taskCard = new ToDoTask(title,dueTime,description,alarmtime);
+                taskCard.id=id;
 
 
                 todaysTasks.add(taskCard);
@@ -89,6 +91,16 @@ public class DataBase extends SQLiteOpenHelper {
         cursor.close();
         return todaysTasks;
     }
+    public void update_todo_done(int taskId , String status ){
+        SQLiteDatabase dataBase=this.getWritableDatabase();
+        String query =  "UPDATE "+ TASK_TABLE +
+                " SET "+col_6+ " = '" +status + "'" +
+                "WHERE " + col_0 +" = " + taskId ;
+        Cursor updateResult = dataBase.rawQuery(query , null);
+        updateResult.moveToFirst();//in bara in ke database update beshe
+        updateResult.close();
+    }
+
     public void update_taskTitle(int taskId , String taskTitle ){
         SQLiteDatabase dataBase=this.getWritableDatabase();
         String query =  "UPDATE "+ TASK_TABLE +
@@ -120,6 +132,37 @@ public class DataBase extends SQLiteOpenHelper {
         SQLiteDatabase dataBase=this.getWritableDatabase();
         String query =  "UPDATE "+ TASK_TABLE +
                 " SET "+col_3+ " = '" +alarmtime + "'" +
+                "WHERE " + col_0 +" = " + taskId ;
+        Cursor updateResult = dataBase.rawQuery(query , null);
+        updateResult.moveToFirst();//in bara in ke database update beshe
+        updateResult.close();
+    }
+    public void delete_task( int taskId){
+        SQLiteDatabase dataBase=this.getWritableDatabase();
+        String query ="DELETE FROM " + TASK_TABLE+
+                " WHERE "+ col_0 +" = " + taskId;
+        Cursor updateResult = dataBase.rawQuery(query , null);
+        updateResult.moveToFirst();//in bara in ke database update beshe
+        updateResult.close();
+    }
+
+
+    //______________________________________________________________________
+    public String getNameOfDay(int taskId){
+        String sql = "select * from " + TASK_TABLE + " where taskid =  " + taskId;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor updateResult = db.rawQuery(sql , null);
+        String day="";
+        if(updateResult.moveToFirst()) {
+            day = updateResult.getString(5);
+        }
+        return day;
+    }
+
+    public void goToNextDay_update_nameofday(int taskId , String day){
+        SQLiteDatabase dataBase=this.getWritableDatabase();
+        String query =  "UPDATE "+ TASK_TABLE +
+                " SET "+col_5+ " = '" +day + "'" +
                 "WHERE " + col_0 +" = " + taskId ;
         Cursor updateResult = dataBase.rawQuery(query , null);
         updateResult.moveToFirst();//in bara in ke database update beshe

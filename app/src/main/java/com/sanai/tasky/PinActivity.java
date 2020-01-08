@@ -1,6 +1,7 @@
 package com.sanai.tasky;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,12 +27,31 @@ public class PinActivity extends AppCompatActivity {
     ArrayList<ImageView>  circle = new ArrayList<ImageView>();
     String[] pass= new String[4] ;
     int i =0;
-    String correct_pass = "1234";
+    String correct_pass = "";
+
+    static SharedPreferences shPref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin);
+
+        shPref = getSharedPreferences("password",getApplicationContext().MODE_PRIVATE);
+
+
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null) {
+             correct_pass = extras.getString("KEY");
+            SharedPreferences.Editor sEdit = shPref.edit();
+            sEdit.putString("pass", correct_pass);
+            sEdit.apply();
+             Toast.makeText(getApplicationContext(),correct_pass,Toast.LENGTH_LONG).show();
+        }else {
+            correct_pass = shPref.getString("pass",null);
+
+        }
+
 
 
         this.dataBase = new DataBase(this);
@@ -62,6 +82,7 @@ public class PinActivity extends AppCompatActivity {
                         i++;
                     }
                     if(i==4){
+                        Toast.makeText(getApplicationContext(),correct_pass+"",Toast.LENGTH_LONG).show();
                         checkPass(pass);
                     }
 

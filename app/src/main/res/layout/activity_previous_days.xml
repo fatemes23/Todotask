@@ -7,6 +7,17 @@
     android:orientation="vertical"
     tools:context=".PreviousDaysActivity">
 
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/toDoScroll"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
     <TextView
         android:layout_marginTop="18dp"
         android:layout_marginLeft="14dp"
@@ -21,10 +32,20 @@
         android:layout_marginTop="18dp">
 
         <ImageView
+            android:id="@+id/noDone"
             android:layout_width="80dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_undraw_no_data_qbuo_copy"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/doneRecycleInPre"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:nestedScrollingEnabled="false">
+
+        </android.support.v7.widget.RecyclerView>
     </FrameLayout>
 
     <TextView
@@ -42,10 +63,24 @@
         >
 
         <ImageView
+            android:id="@+id/noOverdue"
             android:layout_width="80dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_undraw_no_data_qbuo_copy"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/overDueRecycleInPre"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:nestedScrollingEnabled="false">
+        </android.support.v7.widget.RecyclerView>
+
     </FrameLayout>
+    </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 
 </LinearLayout>

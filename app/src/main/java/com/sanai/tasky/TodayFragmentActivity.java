@@ -1,28 +1,40 @@
 package com.sanai.tasky;
 
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public  class TodayFragmentActivity extends Fragment  {
 
     static ArrayList<ToDoTask> myTask;
-    ArrayList<DoneTask> doneTasks;
+    static ArrayList<DoneTask> doneTasks;
    static RecyclerView recyclerView;
-    RecyclerView doneRecyclerView;
+    static RecyclerView doneRecyclerView;
     static TodoTaskAdapter taskAdapter;
-    DoneTaskAdapter donetaskAdapter;
+    static DoneTaskAdapter donetaskAdapter;
    static ImageButton addTask;
     static LinearLayout parentAlpha ;
     static DataBase dataBase;
@@ -43,14 +55,20 @@ public  class TodayFragmentActivity extends Fragment  {
         parentAlpha = (LinearLayout) view.findViewById(R.id.alphaForAddTask);
         todayFragmentActivity = new TodayFragmentActivity();
         //______________________________________________________________________
+        //Toast.makeText(getActivity(),"day : "+nameOfDay,Toast.LENGTH_LONG).show();
 
 
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Add task", Toast.LENGTH_LONG ).show();
+                //Toast.makeText(getActivity(), "Add task", Toast.LENGTH_LONG ).show();
                 parentAlpha.setAlpha((float) .4);
+                Bundle bundle = new Bundle();
+                bundle.putString("nameOfDay", nameOfDay);
+                bundle.putString("whichFrag", "today");
+
                AddTaskFragmentActivity fragmentActivity = new AddTaskFragmentActivity();
+                fragmentActivity.setArguments(bundle);
                getFragmentManager().beginTransaction().setCustomAnimations( R.anim.slide_up_to_bottom, 0, 0, R.anim.slide_up_to_bottom).add(R.id.nestedFrame,fragmentActivity).commit();
                 addTask.setEnabled(false);
 
@@ -71,17 +89,19 @@ public  class TodayFragmentActivity extends Fragment  {
         taskAdapter = new TodoTaskAdapter(myTask,this.getActivity());
         recyclerView.setAdapter(taskAdapter);
 
+        ///_________swipe controlle
+        SwipController swipeController = new SwipController(taskAdapter);
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+
 
 
         //_____________________________________________________________________________\\
         doneTasks =new ArrayList<DoneTask>();
-        doneTasks.add(new DoneTask("Shopping"));
-        doneTasks.add(new DoneTask("Hw"));
-        doneTasks.add(new DoneTask("Shopping"));
-        doneTasks.add(new DoneTask("Hw"));
-        doneTasks.add(new DoneTask("Shopping"));
-        doneTasks.add(new DoneTask("Hw"));
-        doneTasks.add(new DoneTask("Shopping"));
+        ArrayList<ToDoTask> temp =dataBase.getTodayasTasks("done",nameOfDay);
+        for( int i =0 ; i < temp.size() ; i++){
+            doneTasks.add(new DoneTask(temp.get(i).todoTitle , temp.get(i).id));
+        }
 
         doneRecyclerView = (RecyclerView)view.findViewById(R.id.doneRecycle);
         LinearLayoutManager llm = new LinearLayoutManager(this.getActivity());
@@ -89,17 +109,19 @@ public  class TodayFragmentActivity extends Fragment  {
         donetaskAdapter = new DoneTaskAdapter(doneTasks,this.getActivity());
         doneRecyclerView.setAdapter(donetaskAdapter);
 
+        donetaskAdapter.notifyDataSetChanged();//update
+
+
         return  view;
     }
 
-    public static void saveNewTask(String title , String body , String todoime,String alarmtime) {
+    public  void saveNewTask() {
 
         parentAlpha.setAlpha((float)1.0);
         addTask.setEnabled(true);
         //ezafe krdn b database
-        ToDoTask toDoTask = new ToDoTask(title,todoime,body,alarmtime);
-        PinActivity.dataBase.insertTask(toDoTask,nameOfDay,"todo");
-        //update(recyclerView);
+
+        updateToDoTask(recyclerView);
 
 
 
@@ -112,15 +134,59 @@ public  class TodayFragmentActivity extends Fragment  {
 
     }
 
-    public  void update(RecyclerView recyclerView){
-         myTask = new ArrayList<ToDoTask>();
+    public  void updateToDoTask(RecyclerView recyclerView){
+//         myTask = new ArrayList<ToDoTask>();
+//
+//        myTask=dataBase.getTodayasTasks("todo",nameOfDay);
+//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//        recyclerView.setLayoutManager(layoutManager);
+//        taskAdapter = new TodoTaskAdapter(myTask,getActivity());
+//        recyclerView.setAdapter(taskAdapter);
+        myTask.clear();
+        myTask.addAll(dataBase.getTodayasTasks("todo",nameOfDay));
+        taskAdapter.notifyDataSetChanged();
+    }
+    public static   void updateToDoneTask(){
 
-        myTask=dataBase.getTodayasTasks("todo",nameOfDay);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        taskAdapter = new TodoTaskAdapter(myTask,getActivity());
-        recyclerView.setAdapter(taskAdapter);
+        doneTasks.clear();
+        ArrayList<ToDoTask> temp =dataBase.getTodayasTasks("done",nameOfDay);
+        ArrayList<DoneTask> temp2 = new ArrayList<>();
+        for( int i =0 ; i < temp.size() ; i++){
+            temp2.add(new DoneTask(temp.get(i).todoTitle , temp.get(i).id));
+        }
+
+        doneTasks.addAll(temp2);
+        donetaskAdapter.notifyDataSetChanged();
+    }
+    public  static void  showCustomTimePicker(final TextView txt, FragmentActivity fragmentActivity)
+    {
+
+        final Calendar myCalender = Calendar.getInstance();
+        final int hour = myCalender.get(Calendar.HOUR_OF_DAY);
+        int minute = myCalender.get(Calendar.MINUTE);
+
+        TimePickerDialog.OnTimeSetListener myTimeListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                if (view.isShown()) {
+                    myCalender.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                    myCalender.set(Calendar.MINUTE, minute);
+
+                    txt.setText(hourOfDay+":"+minute);
+
+
+                }
+            }
+
+
+        };
+        TimePickerDialog timePickerDialog = new TimePickerDialog(fragmentActivity, TimePickerDialog.THEME_HOLO_DARK , myTimeListener, hour, minute, true);
+        timePickerDialog.setTitle("Choose time :");
+        timePickerDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        timePickerDialog.show();
 
     }
+
+
 
 }

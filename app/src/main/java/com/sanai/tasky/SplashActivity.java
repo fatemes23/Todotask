@@ -80,11 +80,10 @@ public class SplashActivity extends AppCompatActivity {
 
                                         String esm;
                                         String[] arrOfStr = result.split(",", -1);
-                                        Log.d("ressssssssssult" ,result);
                                         Log.d("result3", arrOfStr[2].split(":", 2)[1]);
-                                        esm = arrOfStr[3].split(":", 2)[1].replace("\"", "");
                                         Log.d("essssssssssssm", esm);
                                             Intent myIntent = new Intent(SplashActivity.this, MainActivity.class);
+
                                             myIntent.putExtra("name" , esm);
                                             startActivity(myIntent);
 
@@ -100,9 +99,9 @@ public class SplashActivity extends AppCompatActivity {
 
 
 
-//                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-//                    SplashActivity.this.startActivity(mainIntent);
-//                    SplashActivity.this.finish();
+                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                    SplashActivity.this.startActivity(mainIntent);
+                    SplashActivity.this.finish();
                 }
                 //______________________________________________________________________________________
 

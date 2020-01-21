@@ -12,7 +12,7 @@
         android:layout_height="40dp"
         android:textColor="#FF63DE"
         android:layout_gravity="center_horizontal"
-        android:text="Add new task"/>
+        android:text="@string/add_new_task"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,10 +27,10 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"
-               android:text="Title :"
+                android:text="@string/titlee"
                 android:gravity=""
                 android:textColor="@color/yellow"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
@@ -40,10 +40,11 @@
                 android:background="@android:color/transparent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:hint="title ..."
+                android:hint="@string/title"
                 android:textColor="@color/khakestry"
-                android:textSize="12dp"
-                />
+                android:textSize="12sp"
+                android:inputType=""
+                android:importantForAutofill="no" tools:targetApi="o" />
 
 
         </LinearLayout>
@@ -55,9 +56,9 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_width="0dp"
-                android:text="Note :"
+                android:text="@string/note"
                 android:textColor="@color/yellow"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"/>
 
@@ -66,10 +67,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:textColor="@color/khakestry"
                 android:background="@android:color/transparent"
-                android:hint="Write some note here" />
+                android:hint="@string/write_some_note_here"
+                android:inputType="" />
 
 
         </LinearLayout>
@@ -82,10 +84,10 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="To Do Time :"
+                android:text="@string/to_do_time"
                 android:layout_height="wrap_content"
                 android:textColor="@color/yellow"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:gravity="center_vertical"
                 android:layout_weight="1"/>
             <TextView
@@ -94,13 +96,11 @@
                 android:background="@android:color/transparent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:hint="Tap to select time" />
+                android:hint="@string/tap_to_select_time" />
 
 
 
         </LinearLayout>
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -109,11 +109,11 @@
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
-                android:text="Alarm Time :"
+                android:text="@string/alarm_time"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:textColor="@color/yellow"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:layout_weight="1"/>
             <TextView
                 android:id="@+id/alarmTimeSelect"
@@ -121,7 +121,39 @@
                 android:background="@android:color/transparent"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:hint="Tap to select Alarm Time" />
+                android:hint="@string/tap_to_select_alarm_time" />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/selectedImg"
+                android:layout_width="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_tasky_logo"
+                android:scaleType="fitXY"
+                app:riv_corner_radius="15dp"
+                app:riv_border_width="0dip"
+                app:riv_border_color="#323642"
+                app:riv_mutate_background="true"
+                app:riv_oval="false"
+                android:layout_marginRight="12dp"/>
+
+            <TextView
+                android:id="@+id/selectPic"
+                android:layout_width="0dp"
+                android:background="@android:color/transparent"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:hint="@string/select_pic" />
 
 
         </LinearLayout>
@@ -129,92 +161,8 @@
 
     </LinearLayout>
 
-    <!--
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="Title :"
-                android:gravity=""
-                android:textColor="@color/yellow"
-                android:textSize="12dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="Note :"
-                android:textColor="@color/yellow"
-                android:textSize="12dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="To Do Time :"
-                android:layout_height="wrap_content"
-                android:textColor="@color/yellow"
-                android:textSize="12dp"
-                android:gravity="center_vertical"
-                android:layout_weight="1"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:text="Alarm Time :"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:textColor="@color/yellow"
-                android:textSize="12dp"
-                android:layout_weight="1"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <EditText
-                android:layout_width="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:hint="title"
-                 android:layout_gravity="center"
-                android:textColor="@color/khakestry"
-                android:textSize="12dp"
-                />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:textSize="12dp"
-                android:layout_gravity="center"
-                android:textColor="@color/khakestry"
-                android:background="@android:color/transparent"
-                android:hint="Write some note here" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-                android:layout_gravity="center"
-                android:hint="tap tp select time" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:background="@android:color/transparent"
-                android:layout_height="wrap_content"
-                android:layout_weight="3"
-
-                android:hint="Tap to select Alarm Time" />
 
 
-        </LinearLayout>
-    </LinearLayout>
-    -->
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -231,17 +179,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/pink"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:background="@android:color/transparent"
-                android:text="save"/>
+                android:text="@string/save"/>
             <Button
                 android:id="@+id/cancle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/pink"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
                 android:background="@android:color/transparent"
-                android:text="cancle"/>
+                android:text="@string/cancle"/>
         </LinearLayout>
 
     </FrameLayout>

@@ -1,6 +1,7 @@
 package com.sanai.tasky;
 
 
+import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentActivity;
 
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -47,6 +49,17 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.MyTask
        viewHolder.time.setText(toDoTask.getTodoTime());
        viewHolder.notTime.setText(toDoTask.getTodoNotifictionTime());
        viewHolder.body.setText(toDoTask.getTodoBody());
+       if (toDoTask.getPicString() != ""){
+           ImageClass img = new ImageClass();
+           viewHolder.picImage.setImageBitmap(img.byteArrayToBitMap(img.loadImageFromStorage1(toDoTask.getPicString() +".JPEG")));
+       }else{
+
+           Drawable placeholder = viewHolder.picImage.getContext().getResources().getDrawable(R.drawable.ic_tasky_logo);
+           viewHolder.picImage.setImageDrawable(placeholder);
+           Log.d("khaaaaaaaaaaar" ,"saaaaaaaaaaaaaaaaaaaaaaag");
+
+       }
+
         //viewHolder.notTime.setText(id+"test");
 
 
@@ -102,6 +115,8 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.MyTask
         ImageButton add;
         LinearLayout ll ;
         ImageButton forward ;
+        ImageView picImage;
+
 
         MyTaskViewHolder(View itemView) {
             super(itemView);
@@ -112,6 +127,7 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.MyTask
             add = (ImageButton) itemView.findViewById(R.id.todoAddTime);
             forward = itemView.findViewById(R.id.forwardTask);
             ll = (LinearLayout) itemView.findViewById(R.id.todoNotifictionLayout);
+            picImage = (ImageView) itemView.findViewById(R.id.todotaskPic);
 
 
 

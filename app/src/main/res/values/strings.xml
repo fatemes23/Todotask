@@ -3,4 +3,16 @@
     <string name="to_do">To Do</string>
     <string name="done">Done</string>
     <string name="overdue">Overdue</string>
+    <string name="to_do_time">To Do Time :</string>
+    <string name="alarm_time">Alarm Time :</string>
+    <string name="tap_to_select_alarm_time">Tap to select Alarm Time</string>
+    <string name="tap_to_select_time">Tap to select time</string>
+    <string name="write_some_note_here">Write some note here</string>
+    <string name="save">save</string>
+    <string name="cancle">cancle</string>
+    <string name="note">Note :</string>
+    <string name="title">title ...</string>
+    <string name="add_new_task">Add new task</string>
+    <string name="titlee">Title :</string>
+    <string name="select_pic">Tap to select picture </string>
 </resources>

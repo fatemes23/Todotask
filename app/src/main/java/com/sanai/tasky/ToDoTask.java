@@ -5,13 +5,23 @@ public class ToDoTask {
     String todoTime;
     String todoBody;
     String todoNotifictionTime;
+    String picString ;
     int id;
 
-    public ToDoTask(String todoTitle, String todoTime, String todoBody, String todoNotifictionTime ) {
+    public String getPicString() {
+        return picString;
+    }
+
+    public void setPicString(String picString) {
+        this.picString = picString;
+    }
+
+    public ToDoTask(String todoTitle, String todoTime, String todoBody, String todoNotifictionTime , String picString) {
         this.todoTitle = todoTitle;
         this.todoTime = todoTime;
         this.todoBody = todoBody;
         this.todoNotifictionTime = todoNotifictionTime;
+        this.picString = picString;
 
     }
 

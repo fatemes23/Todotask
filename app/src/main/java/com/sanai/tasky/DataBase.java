@@ -24,11 +24,14 @@ public class DataBase extends SQLiteOpenHelper {
     public static final String col_4 = "alarmtime";
     public static final String col_5 = "dayoftask";
     public static final String col_6 = "status";//done overdue va ..
+    public static final String col_7 = "pic";//done overdue va ..
+    private    static final int DATABASE_VERSION =    3;
+
 
 
 
     public DataBase( Context context ) {
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
@@ -40,14 +43,14 @@ public class DataBase extends SQLiteOpenHelper {
                 + col_3 + " TEXT,"
                 + col_4 + " TEXT,"
                 + col_5 + " TEXT,"
-                + col_6 + " TEXT "
-                + ")";
+                + col_6 + " TEXT,"
+                + col_7 + " TEXT  )";
         sqLiteDatabase.execSQL(CREATE_LEVEL_TABLE);
 
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int DATABASE_VERSION) {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TASK_TABLE);
         onCreate(sqLiteDatabase);
     }
@@ -62,6 +65,7 @@ public class DataBase extends SQLiteOpenHelper {
         values.put(col_4, taskCard.todoNotifictionTime);
         values.put(col_5, dayOfTask);
         values.put(col_6, status);
+        values.put(col_7, taskCard.picString);
         SQLiteDatabase db = this.getWritableDatabase();
         db.insert(TASK_TABLE, null, values);
 
@@ -81,7 +85,8 @@ public class DataBase extends SQLiteOpenHelper {
                 String description = cursor.getString(2);
                 String dueTime = cursor.getString(3);
                 String alarmtime = cursor.getString(4);
-                ToDoTask taskCard = new ToDoTask(title,dueTime,description,alarmtime);
+                String pic = cursor.getString(7);
+                ToDoTask taskCard = new ToDoTask(title,dueTime,description,alarmtime , pic);
                 taskCard.id=id;
 
 

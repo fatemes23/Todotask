@@ -1,16 +1,22 @@
 package com.sanai.tasky;
 
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
 
@@ -24,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -42,7 +49,12 @@ public class AddTaskFragmentActivity extends Fragment{
     String title , body ,time1,time2;
     String nameOfDay;
     String whichFrag;
-
+    ImageView selectedPic ; //ax entkhab shode imageview
+    TextView selectPic ; //button bry raftn b camera v grftn y ax
+    Bitmap photo;
+    String img_name = "";
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int MY_CAMERA_PERMISSION_CODE = 100;
 
 
     @Nullable
@@ -57,8 +69,27 @@ public class AddTaskFragmentActivity extends Fragment{
         body_editTExt = view.findViewById(R.id.noteInput);
         nameOfDay = this.getArguments().getString("nameOfDay");
         whichFrag = this.getArguments().getString("whichFrag");
+        selectedPic = view.findViewById(R.id.selectedImg);
+        selectPic  = view.findViewById(R.id.selectPic);
 
+        //************************************************************************************************
 
+        selectPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
+                }
+                else
+                {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
+                }
+
+            }
+        });
 
         //************************************************************************************************
         cancle = (Button) view.findViewById(R.id.cancle);
@@ -67,8 +98,13 @@ public class AddTaskFragmentActivity extends Fragment{
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().setCustomAnimations( R.anim.slide_down_to_up, R.anim.slide_down_to_up)
                         .remove(AddTaskFragmentActivity.this).commit();
+                if (whichFrag.equals("today")){
+                    TodayFragmentActivity.cancleNewTask();
 
-                TodayFragmentActivity.cancleNewTask();
+                }else if( whichFrag.equals("next")){
+                    NextDaysActivity.cancleNewTask();
+
+                }
 
 
             }
@@ -116,6 +152,8 @@ public class AddTaskFragmentActivity extends Fragment{
                     Toast.makeText(getActivity(),time2,Toast.LENGTH_LONG).show();
 
                 }
+                //__________________________________________________
+
 
 
                 //__________________________________________________
@@ -136,7 +174,7 @@ public class AddTaskFragmentActivity extends Fragment{
                 }else{
                     getFragmentManager().beginTransaction().setCustomAnimations( R.anim.slide_down_to_up, R.anim.slide_down_to_up)
                             .remove(AddTaskFragmentActivity.this).commit();
-                    ToDoTask toDoTask = new ToDoTask(title,time1,body,time2);
+                    ToDoTask toDoTask = new ToDoTask(title,time1,body,time2,img_name);
                     SplashActivity.dataBase.insertTask(toDoTask,nameOfDay,"todo");
 
                     if (whichFrag.equals("today")){
@@ -275,7 +313,54 @@ public class AddTaskFragmentActivity extends Fragment{
 
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_CAMERA_PERMISSION_CODE)
+        {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            {
+                Toast.makeText(getContext(), "camera permission granted", Toast.LENGTH_LONG).show();
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            }
+            else
+            {
+                Toast.makeText(getContext(), "camera permission denied", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK)
+        {
+            photo = (Bitmap) data.getExtras().get("data");
+
+            if (photo !=  null){
+
+                ImageClass img = new ImageClass();
+                NameGenerator nameGenerator = new NameGenerator();
+                 img_name = nameGenerator.randomIdentifier();
+                img.createDirectoryAndSaveFile(photo, img_name+".JPEG"   );
+
+                selectedPic.setImageBitmap(img.byteArrayToBitMap(img.loadImageFromStorage1(img_name +".JPEG")));
+
+            }
+
+
+            //selectedPic.setImageBitmap(photo);
+
+
+            //String str_adrs = saveToInternalStorage(photo);
+            //Toast.makeText(getContext(),"the adrs is : "+str_adrs,Toast.LENGTH_LONG).show();
+            //loadImageFromStorage("/data/user/0/com.sanai.tasky/app_imageDir/profile.jpg",selectedPic);
+            //loadImageFromStorage(str_adrs,selectedPic);
+
+        }
+    }
 
 
 }

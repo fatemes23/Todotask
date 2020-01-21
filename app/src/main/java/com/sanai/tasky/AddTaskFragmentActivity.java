@@ -137,7 +137,7 @@ public class AddTaskFragmentActivity extends Fragment{
                     getFragmentManager().beginTransaction().setCustomAnimations( R.anim.slide_down_to_up, R.anim.slide_down_to_up)
                             .remove(AddTaskFragmentActivity.this).commit();
                     ToDoTask toDoTask = new ToDoTask(title,time1,body,time2);
-                    PinActivity.dataBase.insertTask(toDoTask,nameOfDay,"todo");
+                    SplashActivity.dataBase.insertTask(toDoTask,nameOfDay,"todo");
 
                     if (whichFrag.equals("today")){
                         TodayFragmentActivity todayFragmentActivity = new TodayFragmentActivity();

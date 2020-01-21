@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,13 +33,13 @@ public class NextDaysActivity extends Fragment {
 
         View view = inflater.inflate(R.layout.activity_next_days,container,false);
         nameOfDay = getArguments().getString("nameOfDay");
-        dataBase = PinActivity.dataBase;
+        dataBase = SplashActivity.dataBase;
         addTask =  view.findViewById(R.id.addTaskButtonInNext);
         noTask =  view.findViewById(R.id.NoTaskInNext);
 
         recyclerView = view.findViewById(R.id.todoRecycleInNext);
 
-
+        Log.d("taaagNextDaysActivity", "ooooooooooooooooooonCreateView: NextDaysActivity   " + nameOfDay);
 
 
         //______________________________________________________________________
@@ -110,7 +111,7 @@ public class NextDaysActivity extends Fragment {
     public  void update(RecyclerView recyclerView){
         myTask = new ArrayList<ToDoTask>();
 
-        myTask=PinActivity.dataBase.getTodayasTasks("todo",nameOfDay);
+        myTask=SplashActivity.dataBase.getTodayasTasks("todo",nameOfDay);
 
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());

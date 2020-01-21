@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,16 +39,17 @@ public class PreviousDaysActivity extends Fragment {
         //________________________________________________________________________________________
 
         nameOfDay = getArguments().getString("nameOfDay");
-        dataBase = PinActivity.dataBase;
+        dataBase = SplashActivity.dataBase;
         doneRecycle= view.findViewById(R.id.doneRecycleInPre);
         overdueRecycle= view.findViewById(R.id.overDueRecycleInPre);
         doneTasks = new ArrayList<DoneTask>();
         overedue = new ArrayList<OverdueTask>() ;
         noDone = view.findViewById(R.id.noDone);
         noOverdue = view.findViewById(R.id.noOverdue);
+        Log.d("taagPreviousDayActivity", "ooooooooooonCreateView: PreviousDaysActivity  " + nameOfDay);
         //________________________________________________________________________________________
        // overedue.add(new OverdueTask("title for test",99));
-        ArrayList<ToDoTask> temp = PinActivity.dataBase.getTodayasTasks("overdue" , nameOfDay);
+        ArrayList<ToDoTask> temp = SplashActivity.dataBase.getTodayasTasks("overdue  " , nameOfDay);
         for (int i =0 ; i< temp.size(); i++){
             noOverdue.setVisibility(View.GONE);
             overedue.add(new OverdueTask(temp.get(i).todoTitle , temp.get(i).id));// dare overdue set mikone
@@ -59,7 +61,7 @@ public class PreviousDaysActivity extends Fragment {
         overdueTaskAdapter = new OverdueTaskAdapter(overedue,this.getActivity());
         overdueRecycle.setAdapter(overdueTaskAdapter);
         //_______________________________________________________________________________________
-        ArrayList<ToDoTask> temp2 = PinActivity.dataBase.getTodayasTasks("done" , nameOfDay);
+        ArrayList<ToDoTask> temp2 = SplashActivity.dataBase.getTodayasTasks("done" , nameOfDay);
         //Toast.makeText(getActivity() , temp2.size()+"  " + nameOfDay,Toast.LENGTH_LONG).show();
         for (int i =0 ; i< temp2.size(); i++){
             noDone.setVisibility(View.GONE);

@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sanai.tasky">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,7 +16,6 @@
         <activity android:name=".PreviousDaysActivity" />
         <activity android:name=".TodayFragmentActivity" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".PinActivity" />
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

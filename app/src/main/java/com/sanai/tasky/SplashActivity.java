@@ -6,34 +6,38 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import org.w3c.dom.Text;
 
 public class SplashActivity extends AppCompatActivity {
-    private final int SPLASH_DISPLAY_LENGTH = 3000;
     ImageView logo;
     TextView txt ;
     FrameLayout lay;
     TextView txt2;
-    static SharedPreferences shPref;
+    static  DataBase dataBase ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-       logo = (ImageView)findViewById(R.id.taskyLogo);
-       txt = (TextView)findViewById(R.id.taskyTxt);
-       txt2 = (TextView)findViewById(R.id.txt2);
-        shPref = getSharedPreferences("SET",getApplicationContext().MODE_PRIVATE);
+        logo = findViewById(R.id.taskyLogo);
+        txt = findViewById(R.id.taskyTxt);
+        txt2 = findViewById(R.id.txt2);
 
 
 
-
+        this.dataBase = new DataBase(this);
         Animation clcwise = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.clockwise);
         Animation fade = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade);
         Animation shake = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.shake);
@@ -53,39 +57,52 @@ public class SplashActivity extends AppCompatActivity {
                 /* Create an Intent that will  start the Menu-Activity. */
 
 
-        //______________________________________________________________________________________
+                //______________________________________________________________________________________
 
-                if (shPref.contains("setOrNot")  ){
-                    if( 1==1){
-                            //1==shPref.getInt("setOrNot",0
-                            Intent mainIntent = new Intent(SplashActivity.this, PinActivity.class);
-                             mainIntent.putExtra("KEY",shPref.getString("password",null));
-                            SplashActivity.this.startActivity(mainIntent);
-                                SplashActivity.this.finish();
-                                //boro b pinactivity
-
-                        }
-//                    else {
-//                        SharedPreferences.Editor sEdit = shPref.edit();
-//                        sEdit.putInt("setOrNot", 0);
-//                        sEdit.apply();
-//                        //boro b sign up
-//                        Intent mainIntent = new Intent(SplashActivity.this, SignUp.class);
-//                        SplashActivity.this.startActivity(mainIntent);
-//                        SplashActivity.this.finish();
-//
-//                    }
-
-
-                }else {
-                    SharedPreferences.Editor sEdit = shPref.edit();
-                    sEdit.putInt("setOrNot", 0);
-                    sEdit.apply();
-                    //boro b sign up
+                SharedPreferences prefs = getSharedPreferences("tokesSharedPref", MODE_PRIVATE);
+                String tokenAcsess = prefs.getString("usertoken", "N");//"No name defined" is the default value.
+                if ( tokenAcsess.equals("N")){
                     Intent mainIntent = new Intent(SplashActivity.this, SignUp.class);
                     SplashActivity.this.startActivity(mainIntent);
                     SplashActivity.this.finish();
+                }else {
 
+
+
+                        Ion.with(SplashActivity.this)
+                                .load("http://192.241.136.152:3000/api/user/")
+                                .setHeader("Authorization", "Bearer " + tokenAcsess)
+                                .asString()
+                                .setCallback(new FutureCallback<String>() {
+                                    @Override
+                                    public void onCompleted(Exception e, String result) {
+
+
+                                        String esm;
+                                        String[] arrOfStr = result.split(",", -1);
+                                        Log.d("ressssssssssult" ,result);
+                                        Log.d("result3", arrOfStr[2].split(":", 2)[1]);
+                                        esm = arrOfStr[3].split(":", 2)[1].replace("\"", "");
+                                        Log.d("essssssssssssm", esm);
+                                            Intent myIntent = new Intent(SplashActivity.this, MainActivity.class);
+                                            myIntent.putExtra("name" , esm);
+                                            startActivity(myIntent);
+
+
+
+                                    }
+                                });
+
+
+
+
+
+
+
+
+//                    Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+//                    SplashActivity.this.startActivity(mainIntent);
+//                    SplashActivity.this.finish();
                 }
                 //______________________________________________________________________________________
 
@@ -95,14 +112,5 @@ public class SplashActivity extends AppCompatActivity {
     }
 
 
- public  static  void changeShred (String pass){
-     SharedPreferences.Editor sEdit = shPref.edit();
-     sEdit.putInt("setOrNot", 1);
-     sEdit.apply();
 
-     sEdit = shPref.edit();
-     sEdit.putString("password", pass);
-     sEdit.apply();
- }
 }
-

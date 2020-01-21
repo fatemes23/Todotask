@@ -54,9 +54,9 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.MyTask
             @Override
             public void onClick(View v) {
                 id = todoList.get(i).getIdtOdO();
-               String thisDay =  PinActivity.dataBase.getNameOfDay(id);
+               String thisDay =  SplashActivity.dataBase.getNameOfDay(id);
                String nextDay = getNextDay(thisDay);
-               PinActivity.dataBase.goToNextDay_update_nameofday(id,nextDay);
+               SplashActivity.dataBase.goToNextDay_update_nameofday(id,nextDay);
                 todoList.remove(i);
                 notifyItemRemoved(i);
 
@@ -132,7 +132,7 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.MyTask
         ToDoTask toDoTask = todoList.get(position);
         //delet from data base
        // Log.d("taaaaaaaaaaaaaaaag" , "  " +toDoTask.id);
-        PinActivity.dataBase.delete_task(toDoTask.id);
+        SplashActivity.dataBase.delete_task(toDoTask.id);
         todoList.remove(position);
         notifyItemRemoved(position);
 
@@ -141,7 +141,7 @@ public class TodoTaskAdapter extends RecyclerView.Adapter<TodoTaskAdapter.MyTask
         ToDoTask toDoTask = todoList.get(position);
         //delet from data base
         // Log.d("taaaaaaaaaaaaaaaag" , "  " +toDoTask.id);
-        PinActivity.dataBase.update_todo_done(toDoTask.id , "done");
+        SplashActivity.dataBase.update_todo_done(toDoTask.id , "done");
         todoList.remove(position);
         notifyItemRemoved(position);
         TodayFragmentActivity.updateToDoneTask();

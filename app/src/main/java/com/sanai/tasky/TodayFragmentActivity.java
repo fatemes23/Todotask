@@ -1,8 +1,6 @@
 package com.sanai.tasky;
 
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -10,18 +8,17 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
+
 
 
 import java.util.ArrayList;
@@ -48,15 +45,16 @@ public  class TodayFragmentActivity extends Fragment  {
 
         View view = inflater.inflate(R.layout.activity_today_fragment,container,false);
 
+
         //#############################################################################
         nameOfDay = this.getArguments().getString("nameOfDay");
-        dataBase = PinActivity.dataBase;
+        dataBase = SplashActivity.dataBase;
         addTask = (ImageButton) view.findViewById(R.id.addTaskButton);
         parentAlpha = (LinearLayout) view.findViewById(R.id.alphaForAddTask);
         todayFragmentActivity = new TodayFragmentActivity();
         //______________________________________________________________________
         //Toast.makeText(getActivity(),"day : "+nameOfDay,Toast.LENGTH_LONG).show();
-
+        Log.d("taaagintodayfragament", "ooooooooooooooooooonCreateView: in to day " + nameOfDay);
 
         addTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,13 +133,7 @@ public  class TodayFragmentActivity extends Fragment  {
     }
 
     public  void updateToDoTask(RecyclerView recyclerView){
-//         myTask = new ArrayList<ToDoTask>();
-//
-//        myTask=dataBase.getTodayasTasks("todo",nameOfDay);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//        recyclerView.setLayoutManager(layoutManager);
-//        taskAdapter = new TodoTaskAdapter(myTask,getActivity());
-//        recyclerView.setAdapter(taskAdapter);
+
         myTask.clear();
         myTask.addAll(dataBase.getTodayasTasks("todo",nameOfDay));
         taskAdapter.notifyDataSetChanged();
